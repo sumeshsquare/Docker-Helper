@@ -1,0 +1,25 @@
+version: '3'
+services:
+    nodejs-container:
+        build:
+          context: .
+          dockerfile: Dockerfile ## Dockerfile for the nodejs build
+        container_name: nodejs-container
+        tty: true
+        ports:
+          - "8080:8080" # host:container
+        restart: always
+    nginx:
+        build:
+          context: ./nginx
+          dockerfile: Dockerfile ## Dockerfile for the nginx build
+        container_name: nginx-container
+        tty: true
+        environment:
+          - HOSTNAME=localhost
+        ports:
+          - "80:80" # host:container
+          - "443:443"  # host:container
+        restart: always
+        links:
+          - nodejs-container
